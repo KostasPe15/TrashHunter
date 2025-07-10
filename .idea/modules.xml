@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/trash_hunter/trash_hunter.iml" filepath="$PROJECT_DIR$/trash_hunter/trash_hunter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/trash_hunter/android/trash_hunter_android.iml" filepath="$PROJECT_DIR$/trash_hunter/android/trash_hunter_android.iml" />
     </modules>
   </component>
 </project>
