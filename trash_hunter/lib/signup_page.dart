@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trash_hunter/TextField/custom_textfield.dart';
+import 'package:trash_hunter/TextsStyles/heading_texts.dart';
 import 'package:trash_hunter/login_page.dart';
 
 void main() {
@@ -7,9 +9,20 @@ void main() {
   );
 }
 
-class SignUpPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
 
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController nameController  = TextEditingController();
+
+   bool isPasswordVisible = false;
+
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,18 +33,19 @@ class SignUpPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "SIGN UP",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              const HeadingTexts(
+                text: "SIGN UP",
+                type: HeadingType.h1,
+                color: Colors.black,
               ),
               const SizedBox(height: 40),
-              const TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.person_outline),
-                  labelText: "Full Name",
-                  border: UnderlineInputBorder(),
-                ),
+              CustomTextfield(
+                controller: emailController,
+                label: 'Full Name',
+                prefixIcon: Icon(Icons.person_outline),
+                
               ),
+              
               const SizedBox(height: 20),
               const TextField(
                 decoration: InputDecoration(
@@ -41,12 +55,21 @@ class SignUpPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock_outline),
-                  labelText: "Password",
-                  border: UnderlineInputBorder(),
+             CustomTextfield(
+                controller: passwordController,
+                label: "Password",
+                obscureText: !isPasswordVisible,
+                prefixIcon: const Icon(Icons.lock_outline),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
+                  },
                 ),
               ),
               const SizedBox(height: 15),

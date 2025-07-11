@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:trash_hunter/TextField/custom_textfield.dart';
+import 'package:trash_hunter/TextsStyles/body_texts.dart';
+import 'package:trash_hunter/TextsStyles/heading_texts.dart';
 import 'package:trash_hunter/signup_page.dart';
 
 void main() {
   runApp(
-    const MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false),
+    MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false),
   );
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  bool isPasswordVisible = false;
+
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +33,45 @@ class LoginPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                "SIGN IN",
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              const HeadingTexts(
+                text: "SIGN IN",
+                type: HeadingType.h1,
+                color: Colors.black,
               ),
               const SizedBox(height: 40),
-              const TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email_outlined),
-                  labelText: "Email",
-                  border: UnderlineInputBorder(),
-                ),
+               CustomTextfield(
+                controller: emailController,
+                label: 'Email',
+                prefixIcon: Icon(Icons.email_outlined),
+                
               ),
               const SizedBox(height: 20),
-              const TextField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.lock_outline),
-                  labelText: "Password",
-                  border: UnderlineInputBorder(),
+              CustomTextfield(
+                controller: passwordController,
+                label: "Password",
+                obscureText: !isPasswordVisible,
+                prefixIcon: const Icon(Icons.lock_outline),
+                suffixIcon: IconButton(
+                  icon: Icon(
+                    isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                    color: Colors.grey,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      isPasswordVisible = !isPasswordVisible;
+                    });
+                  },
                 ),
               ),
               const SizedBox(height: 15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Don't have an account? "),
+                  const BodyTexts(
+                    text: "Don't have an account? ",
+                    type: BodyTextType.s,
+                    color: Colors.black,
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -57,12 +83,10 @@ class LoginPage extends StatelessWidget {
                         ),
                       );
                     },
-                    child: const Text(
-                      "Register Here",
-                      style: TextStyle(
-                        color: Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: BodyTexts(
+                      text: "Register Here",
+                      type: BodyTextType.s_bold,
+                      color: Colors.deepPurple,
                     ),
                   ),
                 ],
