@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:trash_hunter/Buttons/primary_button.dart';
 import 'package:trash_hunter/TextField/custom_textfield.dart';
 import 'package:trash_hunter/TextsStyles/body_texts.dart';
 import 'package:trash_hunter/TextsStyles/heading_texts.dart';
@@ -20,8 +21,15 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   bool isPasswordVisible = false;
 
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  @override
+  void dispose(){
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose(); 
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +48,14 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 40),
                CustomTextfield(
-                controller: emailController,
+                controller: _emailController,
                 label: 'Email',
                 prefixIcon: Icon(Icons.email_outlined),
                 
               ),
               const SizedBox(height: 20),
               CustomTextfield(
-                controller: passwordController,
+                controller: _passwordController,
                 label: "Password",
                 obscureText: !isPasswordVisible,
                 prefixIcon: const Icon(Icons.lock_outline),
@@ -92,21 +100,16 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
+              PrimaryButton(
+                text: 'LOGIN',
+                height: 50,
+                width: 120,
+                
                 onPressed: () {
                   // Handle login
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 60,
-                  ),
-                ),
-                child: const Text(
-                  "LOGIN",
-                  style: TextStyle(color: Colors.white),
-                ),
+                
+                
               ),
             ],
           ),

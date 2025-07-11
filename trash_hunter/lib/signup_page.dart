@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:trash_hunter/Buttons/primary_button.dart';
 import 'package:trash_hunter/TextField/custom_textfield.dart';
+import 'package:trash_hunter/TextsStyles/body_texts.dart';
 import 'package:trash_hunter/TextsStyles/heading_texts.dart';
 import 'package:trash_hunter/login_page.dart';
 
@@ -16,11 +18,12 @@ class SignUpPage extends StatefulWidget {
   State<SignUpPage> createState() => _SignUpPageState();
 }
 
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController nameController  = TextEditingController();
+final TextEditingController _passwordController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _nameController = TextEditingController();
 
-   bool isPasswordVisible = false;
+
+bool isPasswordVisible = false;
 
 class _SignUpPageState extends State<SignUpPage> {
   @override
@@ -40,12 +43,10 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 40),
               CustomTextfield(
-                controller: emailController,
+                controller: _emailController,
                 label: 'Full Name',
                 prefixIcon: Icon(Icons.person_outline),
-                
               ),
-              
               const SizedBox(height: 20),
               const TextField(
                 decoration: InputDecoration(
@@ -55,8 +56,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
               ),
               const SizedBox(height: 20),
-             CustomTextfield(
-                controller: passwordController,
+              CustomTextfield(
+                controller: _passwordController,
                 label: "Password",
                 obscureText: !isPasswordVisible,
                 prefixIcon: const Icon(Icons.lock_outline),
@@ -76,7 +77,11 @@ class _SignUpPageState extends State<SignUpPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Already have an account? "),
+                  const BodyTexts(
+                    text: "Already have an account? ",
+                    type: BodyTextType.s,
+                    color: Colors.black,
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -88,32 +93,22 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       );
                     },
-                    child: const Text(
-                      "Login Here",
-                      style: TextStyle(
-                        color: Colors.deepPurple,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: const BodyTexts(
+                      text: "Login Here",
+                      type: BodyTextType.s_bold,
+                      color: Colors.deepPurple,
                     ),
                   ),
                 ],
               ),
               const SizedBox(height: 30),
-              ElevatedButton(
+              PrimaryButton(
+                text: 'REGISTER',
+                height: 50,
+                width: 120,
                 onPressed: () {
                   // Handle sign up
                 },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15,
-                    horizontal: 60,
-                  ),
-                ),
-                child: const Text(
-                  "REGISTER",
-                  style: TextStyle(color: Colors.white),
-                ),
               ),
             ],
           ),
