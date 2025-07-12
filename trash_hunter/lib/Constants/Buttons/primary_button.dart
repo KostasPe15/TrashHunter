@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:trash_hunter/TextsStyles/action_texts.dart';
+
+import '../TextsStyles/action_texts.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -8,11 +9,9 @@ class PrimaryButton extends StatelessWidget {
   final Color textColor;
   final double? width;
   final double height;
-    final Color backgroundColor;
-    final double borderRadius;
-      final EdgeInsets padding;
-
-
+  final Color backgroundColor;
+  final double borderRadius;
+  final EdgeInsets padding;
 
   const PrimaryButton({
     super.key,
@@ -23,8 +22,7 @@ class PrimaryButton extends StatelessWidget {
     required this.height,
     this.backgroundColor = Colors.black,
     this.borderRadius = 24,
-         this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-
+    this.padding = const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
   });
 
   @override
@@ -33,18 +31,17 @@ class PrimaryButton extends StatelessWidget {
       width: width,
       height: height,
       child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          //foregroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: backgroundColor,
+            //foregroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(borderRadius),
+            ),
+            padding: padding,
           ),
-          padding: padding,
-        ),
-        child: ActionTexts(text: text, type: ActionTextType.l,color: textColor)
-          
-      ),
+          child: ActionTexts(
+              text: text, type: ActionTextType.l, color: textColor)),
     );
   }
 }

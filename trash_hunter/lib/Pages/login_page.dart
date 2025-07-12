@@ -1,31 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:trash_hunter/Buttons/primary_button.dart';
-import 'package:trash_hunter/TextField/custom_textfield.dart';
-import 'package:trash_hunter/TextsStyles/body_texts.dart';
-import 'package:trash_hunter/TextsStyles/heading_texts.dart';
-import 'package:trash_hunter/login_page.dart';
+import 'package:trash_hunter/Pages/signup_page.dart';
+import 'package:trash_hunter/widget_tree.dart';
+import '../Constants/Buttons/primary_button.dart';
+import '../Constants/TextField/custom_textfield.dart';
+import '../Constants/TextsStyles/body_texts.dart';
+import '../Constants/TextsStyles/heading_texts.dart';
 
 void main() {
   runApp(
-    const MaterialApp(home: SignUpPage(), debugShowCheckedModeBanner: false),
+    MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false),
   );
 }
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-final TextEditingController _passwordController = TextEditingController();
-final TextEditingController _emailController = TextEditingController();
-final TextEditingController _nameController = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
+  bool isPasswordVisible = false;
 
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
 
-bool isPasswordVisible = false;
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
 
-class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,23 +43,15 @@ class _SignUpPageState extends State<SignUpPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const HeadingTexts(
-                text: "SIGN UP",
+                text: "SIGN IN",
                 type: HeadingType.h1,
                 color: Colors.black,
               ),
               const SizedBox(height: 40),
               CustomTextfield(
                 controller: _emailController,
-                label: 'Full Name',
-                prefixIcon: Icon(Icons.person_outline),
-              ),
-              const SizedBox(height: 20),
-              const TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.email_outlined),
-                  labelText: "Email",
-                  border: UnderlineInputBorder(),
-                ),
+                label: 'Email',
+                prefixIcon: Icon(Icons.email_outlined),
               ),
               const SizedBox(height: 20),
               CustomTextfield(
@@ -78,7 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const BodyTexts(
-                    text: "Already have an account? ",
+                    text: "Don't have an account? ",
                     type: BodyTextType.s,
                     color: Colors.black,
                   ),
@@ -88,13 +86,13 @@ class _SignUpPageState extends State<SignUpPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return LoginPage();
+                            return SignUpPage();
                           },
                         ),
                       );
                     },
-                    child: const BodyTexts(
-                      text: "Login Here",
+                    child: BodyTexts(
+                      text: "Register Here",
                       type: BodyTextType.s_bold,
                       color: Colors.deepPurple,
                     ),
@@ -103,11 +101,18 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 30),
               PrimaryButton(
-                text: 'REGISTER',
+                text: 'LOGIN',
                 height: 50,
                 width: 120,
                 onPressed: () {
-                  // Handle sign up
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return WidgetTree();
+                      },
+                    ),
+                  );
                 },
               ),
             ],

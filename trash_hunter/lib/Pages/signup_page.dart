@@ -1,36 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:trash_hunter/Buttons/primary_button.dart';
-import 'package:trash_hunter/TextField/custom_textfield.dart';
-import 'package:trash_hunter/TextsStyles/body_texts.dart';
-import 'package:trash_hunter/TextsStyles/heading_texts.dart';
-import 'package:trash_hunter/signup_page.dart';
+import '../Constants/Buttons/primary_button.dart';
+import '../Constants/TextField/custom_textfield.dart';
+import '../Constants/TextsStyles/body_texts.dart';
+import '../Constants/TextsStyles/heading_texts.dart';
 
 void main() {
   runApp(
-    MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false),
+    const MaterialApp(home: SignUpPage(), debugShowCheckedModeBanner: false),
   );
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SignUpPage> createState() => _SignUpPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
-  bool isPasswordVisible = false;
+final TextEditingController _passwordController = TextEditingController();
+final TextEditingController _emailController = TextEditingController();
+final TextEditingController _nameController = TextEditingController();
 
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+bool isPasswordVisible = false;
 
-  @override
-  void dispose(){
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose(); 
-  }
-
+class _SignUpPageState extends State<SignUpPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,16 +35,21 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const HeadingTexts(
-                text: "SIGN IN",
+                text: "SIGN UP",
                 type: HeadingType.h1,
                 color: Colors.black,
               ),
               const SizedBox(height: 40),
-               CustomTextfield(
+              CustomTextfield(
+                controller: _nameController,
+                label: 'Full Name',
+                prefixIcon: Icon(Icons.person_outline),
+              ),
+              const SizedBox(height: 20),
+              CustomTextfield(
                 controller: _emailController,
                 label: 'Email',
                 prefixIcon: Icon(Icons.email_outlined),
-                
               ),
               const SizedBox(height: 20),
               CustomTextfield(
@@ -76,23 +74,16 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const BodyTexts(
-                    text: "Don't have an account? ",
+                    text: "Already have an account? ",
                     type: BodyTextType.s,
                     color: Colors.black,
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return SignUpPage();
-                          },
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
-                    child: BodyTexts(
-                      text: "Register Here",
+                    child: const BodyTexts(
+                      text: "Login Here",
                       type: BodyTextType.s_bold,
                       color: Colors.deepPurple,
                     ),
@@ -101,15 +92,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 30),
               PrimaryButton(
-                text: 'LOGIN',
+                text: 'REGISTER',
                 height: 50,
                 width: 120,
-                
                 onPressed: () {
-                  // Handle login
+                  Navigator.pop(context);
                 },
-                
-                
               ),
             ],
           ),
