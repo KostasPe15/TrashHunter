@@ -4,3 +4,4 @@
 import 'package:flutter/cupertino.dart';
 
 ValueNotifier<int> selectedPageNotifier = ValueNotifier(0);
+const String google_api_key = 'AIzaSyDXY17jBNdoJZY2b8AAunKjShjuVQPzi5w';

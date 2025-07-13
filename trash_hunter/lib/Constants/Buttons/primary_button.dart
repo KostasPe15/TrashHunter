@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import '../TextsStyles/action_texts.dart';
 
 class PrimaryButton extends StatelessWidget {
