@@ -6,11 +6,7 @@ import '../Constants/TextField/custom_textfield.dart';
 import '../Constants/TextsStyles/body_texts.dart';
 import '../Constants/TextsStyles/heading_texts.dart';
 
-void main() {
-  runApp(
-    MaterialApp(home: LoginPage(), debugShowCheckedModeBanner: false),
-  );
-}
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

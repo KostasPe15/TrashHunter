@@ -4,11 +4,6 @@ import '../Constants/TextField/custom_textfield.dart';
 import '../Constants/TextsStyles/body_texts.dart';
 import '../Constants/TextsStyles/heading_texts.dart';
 
-void main() {
-  runApp(
-    const MaterialApp(home: SignUpPage(), debugShowCheckedModeBanner: false),
-  );
-}
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
