@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:trash_hunter/Constants/TextsStyles/heading_texts.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +17,7 @@ class _FeedPageState extends State<FeedPage> {
   List<Map<String, dynamic>> _suggestions = [];
   bool _isFetching = false;
   Timer? _debounce;
+  Set<Marker> markers = {};
   final ScrollController _scrollController = ScrollController();
   final DraggableScrollableController _draggableController =
       DraggableScrollableController();
@@ -103,6 +102,22 @@ class _FeedPageState extends State<FeedPage> {
     }
   }
 
+  void _onMapCreated(GoogleMapController controller) {
+    _mapController = controller;
+    setState(() {
+      markers.add(Marker(
+        markerId: MarkerId('marker1'),
+        position: LatLng(40.614281, 22.966344),
+        infoWindow: InfoWindow(title: 'Toumba'),
+      ));
+      markers.add(Marker(
+        markerId: MarkerId('marker2'),
+        position: LatLng(40.6401, 22.9444),
+        infoWindow: InfoWindow(title: 'Thessaloniki'),
+      ));
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -144,9 +159,8 @@ class _FeedPageState extends State<FeedPage> {
                       target: _initialPosition,
                       zoom: 12,
                     ),
-                    onMapCreated: (GoogleMapController controller) {
-                      _mapController = controller;
-                    },
+                    onMapCreated: _onMapCreated,
+                    markers: markers,
                     zoomControlsEnabled: true,
                     onTap: (_) {
                       _draggableController.animateTo(
