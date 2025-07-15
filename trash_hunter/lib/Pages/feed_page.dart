@@ -126,16 +126,13 @@ class _FeedPageState extends State<FeedPage> {
               child: Stack(
                 children: [
                   GoogleMap(
-                    padding:
-                        EdgeInsets.only(bottom: 70), // Move controls higher
-
                     initialCameraPosition: CameraPosition(
                       target: _initialPosition,
                       zoom: 12,
                     ),
                     onMapCreated: _onMapCreated,
                     markers: markers,
-                    zoomControlsEnabled: true,
+                    zoomControlsEnabled: false,
                     onTap: (_) {
                       _draggableController.animateTo(
                         0.10,
