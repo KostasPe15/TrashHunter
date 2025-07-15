@@ -22,83 +22,54 @@ class _FeedPageState extends State<FeedPage> {
   final DraggableScrollableController _draggableController =
       DraggableScrollableController();
 
-  void _onSearchChanged(String query) {
-    if (_debounce?.isActive ?? false) _debounce!.cancel();
-
-    _debounce = Timer(const Duration(milliseconds: 500), () async {
-      if (query.isEmpty) {
-        setState(() => _suggestions = []);
-        return;
-      }
-
-      setState(() => _isFetching = true);
-
-      try {
-        final results = await getSuggestions(query);
-        setState(() {
-          _suggestions = results;
-          _isFetching = false;
-        });
-      } catch (e) {
-        setState(() {
-          _suggestions = [];
-          _isFetching = false;
-        });
-      }
-    });
-  }
+  final double _minChildSize = 0.10;
+  final double _maxChildSize = 0.85;
 
   final LatLng _initialPosition =
       const LatLng(40.6401, 22.9444); // Thessaloniki
 
   final TextEditingController _searchController = TextEditingController();
-  Future<List<Map<String, dynamic>>> getSuggestions(String query) async {
-    final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/search?q=$query&format=json&addressdetails=1');
-
-    final response = await http.get(url, headers: {
-      'User-Agent':
-          'TrashHunterApp/1.0 (your_email@example.com)' // Nominatim requires this
-    });
-
-    if (response.statusCode == 200) {
-      final List data = json.decode(response.body);
-      return data
-          .map((e) => {
-                'name': e['display_name'],
-                'lat': double.parse(e['lat']),
-                'lon': double.parse(e['lon']),
-              })
-          .toList();
-    } else {
-      throw Exception("Failed to fetch suggestions");
-    }
-  }
 
   Future<void> _searchAndNavigate() async {
-    final query = _searchController.text;
+    final query = _searchController.text.trim();
     if (query.isEmpty) return;
 
-    try {
-      final suggestions = await getSuggestions(query);
+    setState(() => _isFetching = true);
 
-      if (suggestions.isNotEmpty) {
-        final first = suggestions.first;
-        _mapController.animateCamera(CameraUpdate.newLatLngZoom(
-          LatLng(first['lat'], first['lon']),
-          15,
-        ));
-        FocusScope.of(context).unfocus();
-        setState(() => _suggestions = []);
+    try {
+      final url = Uri.parse(
+          'https://nominatim.openstreetmap.org/search?q=$query&format=json&limit=1');
+
+      final response =
+          await http.get(url, headers: {'User-Agent': 'TrashHunterApp/1.0'});
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = json.decode(response.body);
+
+        if (data.isNotEmpty) {
+          final result = data[0];
+          final lat = double.parse(result['lat']);
+          final lon = double.parse(result['lon']);
+
+          _mapController.animateCamera(
+            CameraUpdate.newLatLngZoom(LatLng(lat, lon), 14),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Location not found.')),
+          );
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("No results found for: $query"),
-        ));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error contacting location service.')),
+        );
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text("Error: $e"),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Search failed: $e')),
+      );
+    } finally {
+      setState(() => _isFetching = false);
     }
   }
 
@@ -155,6 +126,9 @@ class _FeedPageState extends State<FeedPage> {
               child: Stack(
                 children: [
                   GoogleMap(
+                    padding:
+                        EdgeInsets.only(bottom: 70), // Move controls higher
+
                     initialCameraPosition: CameraPosition(
                       target: _initialPosition,
                       zoom: 12,
@@ -190,7 +164,6 @@ class _FeedPageState extends State<FeedPage> {
                       borderRadius: BorderRadius.circular(8),
                       child: TextField(
                         controller: _searchController,
-                        onChanged: _onSearchChanged,
                         decoration: InputDecoration(
                           hintText: "Search location...",
                           prefixIcon: Icon(Icons.search),
@@ -294,20 +267,24 @@ class _FeedPageState extends State<FeedPage> {
                         ),
                       ),
                       Positioned(
-                        top: 10,
+                        top: 0,
                         left: 0,
                         right: 0,
                         child: GestureDetector(
-                          onTap: () {
-                            final size = _draggableController.size;
-                            final targetSize = size < 0.5 ? 0.85 : 0.15;
-                            _draggableController.animateTo(
-                              targetSize,
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
+                          behavior: HitTestBehavior.translucent,
+                          onVerticalDragUpdate: (details) {
+                            // Forward the drag to the DraggableScrollableController
+                            final newSize = (_draggableController.size -
+                                    details.primaryDelta! /
+                                        MediaQuery.of(context).size.height)
+                                .clamp(_minChildSize, _maxChildSize);
+
+                            _draggableController.jumpTo(newSize);
                           },
-                          child: Center(
+                          child: Container(
+                            height:
+                                30, // Make the whole top 30px area draggable
+                            alignment: Alignment.center,
                             child: Container(
                               width: 40,
                               height: 5,
