@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Constants/Buttons/primary_button.dart';
@@ -22,11 +23,29 @@ bool isPasswordVisible = false;
 class _SignUpPageState extends State<SignUpPage> {
   Future<void> createUserWithEmailAndPassword() async {
     try {
+      //Authentication
       final userCredential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+
+      //Add user details to users db
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userCredential.user?.uid)
+          .set({
+        "first_name": _firstNameController.text.trim(),
+        "last_name": _lastNameController.text.trim(),
+        'saved': [],
+        'created': []
+      });
+
+      //added becasue createUserWithEmailAndPassword automatically log user in
+      FirebaseAuth.instance.signOut();
+
+      _firstNameController.clear();
+      _lastNameController.clear();
       _emailController.clear();
       _passwordController.clear();
       ScaffoldMessenger.of(context).showSnackBar(
@@ -45,14 +64,15 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _emailController.dispose();
-    _passwordController.dispose();
-    _firstNameController.dispose();
-    _lastNameController.dispose();
-  }
+  //Petaei error otna kaneis logout kai patas sign up
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _emailController.dispose();
+  //   _passwordController.dispose();
+  //   _firstNameController.dispose();
+  //   _lastNameController.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
