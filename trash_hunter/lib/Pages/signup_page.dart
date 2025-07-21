@@ -1,9 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Constants/Buttons/primary_button.dart';
 import '../Constants/TextField/custom_textfield.dart';
 import '../Constants/TextsStyles/body_texts.dart';
 import '../Constants/TextsStyles/heading_texts.dart';
-
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -14,11 +14,46 @@ class SignUpPage extends StatefulWidget {
 
 final TextEditingController _passwordController = TextEditingController();
 final TextEditingController _emailController = TextEditingController();
-final TextEditingController _nameController = TextEditingController();
+final TextEditingController _firstNameController = TextEditingController();
+final TextEditingController _lastNameController = TextEditingController();
 
 bool isPasswordVisible = false;
 
 class _SignUpPageState extends State<SignUpPage> {
+  Future<void> createUserWithEmailAndPassword() async {
+    try {
+      final userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      _emailController.clear();
+      _passwordController.clear();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Registration successful!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "An error occurred"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,8 +71,14 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
               const SizedBox(height: 40),
               CustomTextfield(
-                controller: _nameController,
-                label: 'Full Name',
+                controller: _firstNameController,
+                label: 'First Name',
+                prefixIcon: Icon(Icons.person_outline),
+              ),
+              const SizedBox(height: 20),
+              CustomTextfield(
+                controller: _lastNameController,
+                label: 'Last Name',
                 prefixIcon: Icon(Icons.person_outline),
               ),
               const SizedBox(height: 20),
@@ -90,8 +131,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 text: 'REGISTER',
                 height: 50,
                 width: 120,
-                onPressed: () {
-                  Navigator.pop(context);
+                onPressed: () async {
+                  createUserWithEmailAndPassword();
                 },
               ),
             ],

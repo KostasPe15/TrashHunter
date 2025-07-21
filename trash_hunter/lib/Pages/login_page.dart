@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trash_hunter/Pages/signup_page.dart';
 import 'package:trash_hunter/widget_tree.dart';
@@ -5,8 +6,6 @@ import '../Constants/Buttons/primary_button.dart';
 import '../Constants/TextField/custom_textfield.dart';
 import '../Constants/TextsStyles/body_texts.dart';
 import '../Constants/TextsStyles/heading_texts.dart';
-
-
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -26,6 +25,31 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+  }
+
+  Future<void> loginUserWithEmailAndPassword() async {
+    try {
+      final userCredential =
+          await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) {
+            return WidgetTree();
+          },
+        ),
+      );
+    } on FirebaseAuthException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? "An error occurred"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
@@ -100,15 +124,8 @@ class _LoginPageState extends State<LoginPage> {
                 text: 'LOGIN',
                 height: 50,
                 width: 120,
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return WidgetTree();
-                      },
-                    ),
-                  );
+                onPressed: () async {
+                  loginUserWithEmailAndPassword();
                 },
               ),
             ],
