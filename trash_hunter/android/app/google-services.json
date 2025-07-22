@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "800170663032",
+    "project_id": "trash-hunter-e368d",
+    "storage_bucket": "trash-hunter-e368d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:800170663032:android:05bbf7c810ba076390618d",
+        "android_client_info": {
+          "package_name": "com.trash_hunter.trash_hunter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBM0ATRU20A2QJznPYnKx1cKINhMuAQrAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:trash_hunter/Constants/notifiers.dart';
 import 'package:trash_hunter/Pages/signup_page.dart';
 import 'package:trash_hunter/widget_tree.dart';
 import '../Constants/Buttons/primary_button.dart';
@@ -34,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      selectedPageNotifier.value = 0;// ΓΙΑ ΝΑ ΜΑΣ ΠΑΕΙ ΠΑΝΤΑ ΣΤΟ feed page ΟΤΑΝ ΑΠΟΣΥΝΔΕΟΜΑΣΤΕ ΚΑΙ ΞΑΝΑΣΥΝΔΕΟΜΑΣΤΕ
+
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(

@@ -9,38 +9,60 @@ class NavbarWidget extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: selectedPageNotifier,
       builder: (context, selectedPage, child) {
-        // return NavigationBar(
-        //   backgroundColor: Colors.grey,
-        //   destinations: [
-        //     NavigationDestination(icon: Icon(Icons.home), label: 'Home'),
-        //     NavigationDestination(
-        //         icon: Icon(Icons.bookmark_added), label: 'Saved'),
-        //     NavigationDestination(icon: Icon(Icons.person), label: 'Profile'),
-        //   ],
-        //   onDestinationSelected: (int value) {
-        //     selectedPageNotifier.value = value;
-        //   },
-        //   selectedIndex: selectedPage,
-        // );
         return BottomAppBar(
-          color: Colors.grey,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              IconButton(
-                  icon: Icon(Icons.home),
-                  onPressed: () => selectedPageNotifier.value = 0),
-              IconButton(
-                  icon: Icon(Icons.bookmark_added),
-                  onPressed: () => selectedPageNotifier.value = 1),
-              IconButton(
-                  icon: Icon(Icons.person),
-                  onPressed: () => selectedPageNotifier.value = 2),
-              SizedBox(width: 24), // Space at the end
-            ],
+          color: Colors.grey[100],
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 6,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _buildNavItem(
+                  icon: Icons.home,
+                  index: 0,
+                  selectedIndex: selectedPage,
+                ),
+                _buildNavItem(
+                  icon: Icons.bookmark_added,
+                  index: 1,
+                  selectedIndex: selectedPage,
+                ),
+                _buildNavItem(
+                  icon: Icons.person,
+                  index: 2,
+                  selectedIndex: selectedPage,
+                ),
+                const SizedBox(width: 24), // space for FAB
+              ],
+            ),
           ),
         );
       },
+    );
+  }
+
+  Widget _buildNavItem({
+    required IconData icon,
+    required int index,
+    required int selectedIndex,
+  }) {
+    final bool isSelected = index == selectedIndex;
+
+    return GestureDetector(
+      onTap: () => selectedPageNotifier.value = index,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: isSelected ? Colors.deepPurple.withOpacity(0.1) : Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(
+          icon,
+          color: isSelected ? Colors.deepPurple : Colors.grey[600],
+        ),
+      ),
     );
   }
 }
