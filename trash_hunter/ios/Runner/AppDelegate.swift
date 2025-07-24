@@ -8,6 +8,7 @@ import UIKit
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     GMSServices.provideAPIKey("AIzaSyDEtvIEGZCyUmlFaFuft0H5_2M8wiFxCHA")
+    MSPlacesClient.provideAPIKey("AIzaSyDEtvIEGZCyUmlFaFuft0H5_2M8wiFxCHA")
     GeneratedPluginRegistrant.register(with: self)
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
   }

@@ -22,8 +22,8 @@ class _MapWidgetState extends State<MapWidget> {
     setState(() {
       markers.add(Marker(
         markerId: MarkerId('marker1'),
-        position: LatLng(40.614281, 22.966344),
-        infoWindow: InfoWindow(title: 'Toumba'),
+        position: LatLng(40.635658899999996, 22.9389212),
+        infoWindow: InfoWindow(title: 'Goum'),
       ));
       markers.add(Marker(
         markerId: MarkerId('marker2'),
@@ -50,6 +50,7 @@ class _MapWidgetState extends State<MapWidget> {
         child: Stack(
           children: [
             GoogleMap(
+              mapType: MapType.hybrid,
               initialCameraPosition: CameraPosition(
                 target: _initialPosition,
                 zoom: 12,
